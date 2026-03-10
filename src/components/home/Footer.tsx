@@ -153,17 +153,25 @@ const Footer: React.FC<FooterProps> = ({ data }) => {
                             Company
                         </h4>
                         <ul className="flex flex-col gap-3">
-                            {Array.isArray(data.explore_links) && data.explore_links.map((link, index) => (
-                                <li key={index}>
-                                    <Link
-                                        href={link.page_link || "#"}
-                                        className="text-slate-400 hover:text-orange-500 transition-colors duration-300 text-sm flex items-center group"
-                                    >
-                                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mr-2 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        {link.page_name}
-                                    </Link>
-                                </li>
-                            ))}
+                            {Array.isArray(data.explore_links) && data.explore_links.map((link, index) => {
+                                const href = link.page_name.toLowerCase() === 'home'
+                                    ? '/'
+                                    : link.page_name.toLowerCase() === 'services'
+                                        ? '/services'
+                                        : (link.page_link || "#");
+
+                                return (
+                                    <li key={index}>
+                                        <Link
+                                            href={href}
+                                            className="text-slate-400 hover:text-orange-500 transition-colors duration-300 text-sm flex items-center group"
+                                        >
+                                            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mr-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            {link.page_name}
+                                        </Link>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </motion.div>
 

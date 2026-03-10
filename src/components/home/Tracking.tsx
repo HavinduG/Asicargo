@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { motion, useInView, Variants } from "framer-motion";
 import { MapPin, ArrowRight } from "lucide-react";
 
@@ -13,6 +14,15 @@ export default function Tracking({ data: trackingData }: TrackingProps) {
     const [trackingNumber, setTrackingNumber] = useState("");
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-50px" });
+    const router = useRouter();
+
+    const handleTrack = () => {
+        if (trackingNumber.trim()) {
+            router.push(`/tracking?id=${encodeURIComponent(trackingNumber)}`);
+        } else {
+            router.push("/tracking");
+        }
+    };
 
     return (
         <section className="w-full relative z-30 mt-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pointer-events-none">
@@ -51,10 +61,14 @@ export default function Tracking({ data: trackingData }: TrackingProps) {
                     </div>
                     <input
                         type="text"
+                        value={trackingNumber}
+                        onChange={(e) => setTrackingNumber(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleTrack()}
                         placeholder="Enter tracking number (Ex: LK-DXB-12345)"
                         className="w-full h-16 pl-12 pr-32 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 focus:bg-white transition-all shadow-inner placeholder:text-slate-400 font-medium"
                     />
                     <motion.button
+                        onClick={handleTrack}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         className="absolute right-2 top-2 bottom-2 bg-[#0A1629] hover:bg-[#112444] text-white px-6 sm:px-8 rounded-lg font-semibold transition-colors shadow-md flex items-center justify-center gap-2"

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 interface HeaderProps {
@@ -20,6 +21,7 @@ export default function Header({ header_logo, menu }: HeaderProps) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         let lastScrollY = window.scrollY;
@@ -75,15 +77,30 @@ export default function Header({ header_logo, menu }: HeaderProps) {
 
                 {/* Desktop Nav */}
                 <nav className="hidden md:flex items-center gap-8">
-                    {menu.map((item: any, i: number) => (
-                        <Link
-                            key={i}
-                            href={item.menu_url || "#"}
-                            className="text-sm font-medium text-zinc-600 hover:text-orange-500 dark:text-zinc-300 dark:hover:text-orange-500 transition-colors"
-                        >
-                            {item.menu_name}
-                        </Link>
-                    ))}
+                    {menu.map((item: any, i: number) => {
+                        const href = item.menu_name.toLowerCase() === 'home'
+                            ? '/'
+                            : item.menu_name.toLowerCase() === 'services'
+                                ? '/services'
+                                : item.menu_name.toLowerCase() === 'tracking'
+                                    ? '/tracking'
+                                    : (item.menu_url || "#");
+
+                        const isActive = pathname === href;
+
+                        return (
+                            <Link
+                                key={i}
+                                href={href}
+                                className={`text-sm font-medium transition-colors ${isActive
+                                    ? "text-orange-500"
+                                    : "text-zinc-600 hover:text-orange-500 dark:text-zinc-300 dark:hover:text-orange-500"
+                                    }`}
+                            >
+                                {item.menu_name}
+                            </Link>
+                        );
+                    })}
                 </nav>
 
                 {/* CTA Button */}
@@ -112,16 +129,31 @@ export default function Header({ header_logo, menu }: HeaderProps) {
                     }`}
             >
                 <nav className="flex flex-col px-6 gap-4 overflow-y-auto max-h-[calc(100vh-7rem)] pb-6">
-                    {menu.map((item: any, i: number) => (
-                        <Link
-                            key={i}
-                            href={item.menu_url || "#"}
-                            className="text-base font-medium text-zinc-600 dark:text-zinc-300 hover:text-orange-500 dark:hover:text-orange-500 transition-colors py-2 border-b border-zinc-100 dark:border-zinc-800/50"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                            {item.menu_name}
-                        </Link>
-                    ))}
+                    {menu.map((item: any, i: number) => {
+                        const href = item.menu_name.toLowerCase() === 'home'
+                            ? '/'
+                            : item.menu_name.toLowerCase() === 'services'
+                                ? '/services'
+                                : item.menu_name.toLowerCase() === 'tracking'
+                                    ? '/tracking'
+                                    : (item.menu_url || "#");
+
+                        const isActive = pathname === href;
+
+                        return (
+                            <Link
+                                key={i}
+                                href={href}
+                                className={`text-base font-medium transition-colors py-2 border-b border-zinc-100 dark:border-zinc-800/50 ${isActive
+                                    ? "text-orange-500"
+                                    : "text-zinc-600 dark:text-zinc-300 hover:text-orange-500 dark:hover:text-orange-500"
+                                    }`}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                {item.menu_name}
+                            </Link>
+                        );
+                    })}
                     <Link
                         href="/book"
                         className="mt-4 px-6 py-3 text-center rounded-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold tracking-wide transition-colors"

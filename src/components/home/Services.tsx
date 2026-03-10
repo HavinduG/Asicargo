@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const fadeUpVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
@@ -23,9 +24,25 @@ interface ServicesProps {
     data: any;
 }
 
+// Helper to convert string like "Road Freight" into "road-freight"
+const slugify = (text: string) => {
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')       // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
+        .replace(/\-\-+/g, '-');    // Replace multiple - with single -
+};
+
 export default function Services({ data: servicesData }: ServicesProps) {
     const sectionRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+    const router = useRouter();
+
+    const handleServiceClick = (serviceName: string) => {
+        router.push(`/services?service=${slugify(serviceName)}`);
+    };
 
     return (
         <section ref={sectionRef} className="w-full py-24 sm:py-32 bg-[#F8F9FA] overflow-hidden">
@@ -60,7 +77,8 @@ export default function Services({ data: servicesData }: ServicesProps) {
                             key={index}
                             variants={fadeUpVariants}
                             whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                            className="bg-white rounded-2xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-shadow duration-300 flex flex-col h-full border border-slate-100"
+                            className="bg-white rounded-2xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-shadow duration-300 flex flex-col h-full border border-slate-100 cursor-pointer"
+                            onClick={() => handleServiceClick(service.service_name)}
                         >
                             {/* Icon Container */}
                             <div className="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center mb-8">
@@ -83,6 +101,10 @@ export default function Services({ data: servicesData }: ServicesProps) {
                             {/* Learn More Link */}
                             <motion.button
                                 className="group flex items-center gap-2 text-orange-500 font-semibold text-sm mt-auto"
+                                onClick={(e) => {
+                                    e.stopPropagation(); // prevent double route push
+                                    handleServiceClick(service.service_name);
+                                }}
                             >
                                 Learn more
                                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
