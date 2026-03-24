@@ -60,7 +60,7 @@ export default function Hero({ data: heroData }: HeroProps) {
     return (
         <section
             ref={containerRef}
-            className="relative w-full h-screen min-h-[800px] flex items-center pt-20 overflow-hidden bg-black"
+            className="relative w-full h-screen min-h-[800px] flex items-center pt-32 md:pt-20 overflow-hidden bg-black"
         >
             {/* Background Video */}
             <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
@@ -81,7 +81,7 @@ export default function Hero({ data: heroData }: HeroProps) {
             <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-orange-500/10 blur-[120px] rounded-full pointer-events-none z-0 mix-blend-screen" />
 
             {/* Main Content */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col justify-center h-full pb-32">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col justify-center h-full pb-48 md:pb-32 mt-10 md:mt-0">
                 <div className="max-w-3xl">
                     {/* Tag */}
                     <div className="inline-block px-4 py-1.5 mb-6 rounded-md border border-orange-500/30 bg-orange-500/10 backdrop-blur-sm text-orange-400 text-sm font-semibold uppercase tracking-wider">
@@ -134,13 +134,19 @@ export default function Hero({ data: heroData }: HeroProps) {
             <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/10 bg-black/40 backdrop-blur-xl">
                 <div
                     ref={featuresRef}
-                    className="max-w-7xl mx-auto px-6 py-6 md:py-8 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 divide-x divide-white/10"
+                    className="max-w-7xl mx-auto px-6 py-6 md:py-8 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8"
                 >
                     {[heroData.word_1, heroData.word_2, heroData.word_3, heroData.word_4].map(
                         (word, index) => (
                             <div
                                 key={index}
-                                className="pl-6 md:pl-8 first:pl-0 first:border-0"
+                                className={
+                                    index === 0
+                                        ? ""
+                                        : index === 2
+                                        ? "md:pl-8 md:border-l md:border-white/10"
+                                        : "pl-6 md:pl-8 border-l border-white/10"
+                                }
                                 dangerouslySetInnerHTML={{
                                     __html: word
                                         .replace(/<p><strong/g, '<p class="text-xs md:text-sm font-bold text-orange-500 uppercase tracking-wider mb-1"><strong')

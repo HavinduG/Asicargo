@@ -239,9 +239,9 @@ export default function Header({ header_logo, menu }: HeaderProps) {
           position: absolute;
           top: 100%;
           left: 0; right: 0;
-          background: rgba(255,255,255,0.88);
-          backdrop-filter: blur(24px) saturate(180%);
-          -webkit-backdrop-filter: blur(24px) saturate(180%);
+          background: rgba(255,255,255,0.96);
+          backdrop-filter: blur(32px) saturate(200%);
+          -webkit-backdrop-filter: blur(32px) saturate(200%);
           border-bottom: 1px solid rgba(255,255,255,0.5);
           overflow: hidden;
           transition: max-height 0.35s cubic-bezier(.4,0,.2,1), opacity 0.3s ease, padding 0.3s;
